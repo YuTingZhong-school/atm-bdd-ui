@@ -1,0 +1,21 @@
+{
+  "name": "atm-electron-ui",
+  "version": "0.1.0",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"wait-on tcp:5173 && electron .\"",
+    "build": "vite build",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.6.2",
+    "concurrently": "^8.2.2",
+    "electron": "^31.7.7",
+    "vite": "^4.5.14",
+    "wait-on": "^7.2.0"
+  }
+}

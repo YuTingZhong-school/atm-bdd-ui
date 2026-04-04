@@ -1,0 +1,13 @@
+{
+    "name": "atm-bdd",
+    "version": "1.0.0",
+    "description": "ATM frontend BDD test project",
+    "scripts": {
+        "test:bdd": "cucumber-js \"Withdrawal/features/**/*.feature\" --require \"Withdrawal/support/**/*.js\" --require \"Withdrawal/step/**/*.js\"",
+        "test:bdd:progress": "cucumber-js \"Withdrawal/features/**/*.feature\" --require \"Withdrawal/support/**/*.js\" --require \"Withdrawal/step/**/*.js\" --format progress",
+        "test:bdd:json": "cucumber-js \"Withdrawal/features/**/*.feature\" --require \"Withdrawal/support/**/*.js\" --require \"Withdrawal/step/**/*.js\" --format json:reports/cucumber-report.json"
+    },
+    "devDependencies": {
+        "@cucumber/cucumber": "^9.6.0"
+    }
+}

@@ -1,0 +1,80 @@
+atm-bdd/
+├─ package.json
+├─ cucumber.js
+├─ features/                               --需求語言：描述測試情境與規則
+│  ├─ 一般提款.feature
+│  ├─ 快速提款.feature
+│  ├─ 例外與異常處理.feature
+│  ├─ 帳號與卡別限制.feature
+│  ├─ steps/                               --將需求綁定JS
+│  │  ├─ common.steps.js
+│  │  ├─ withdraw.steps.js
+│  │  ├─ fast-withdraw.steps.js
+│  │  └─ exception.steps.js
+│  └─ support/                             --定義測試資料中ATM狀態
+│     ├─ world.js
+│     └─ hooks.js
+└─ README.md
+
+
+
+
+
+
+【features】
+這是 BDD 的規格來源（Spec）。
+每個 .feature 檔案是「一個功能域」：
+NormalWithdrawal.feature：一般提款主流程與金額驗證
+QuickWithdrawal.feature：快速提款流程
+Exceptions.feature：異常與例外（未取卡/鈔、網路中斷、沖正）
+AccAndCardRestricion.feature：卡別/帳號別限制（自行卡、他行卡、多帳號等）
+重點：這層是「需求文件」，不是程式碼邏輯。
+
+【step】
+這是 Step Definitions，負責把自然語言變成可執行邏輯。
+common.step.js：跨情境共用步驟（插卡、驗證、退卡、畫面斷言）
+withdraw.steps.js：一般提款專屬邏輯（金額規則、換鈔、失敗訊息）
+fastWithdraw.steps.js：快速提款專屬邏輯
+exception.steps.js：異常事件與代碼、沖正、Pending log
+重點：這層是「行為翻譯器」，把 feature 句子映射到程式邏輯。
+
+【support】
+word.js
+這裡其實是 World（你檔名是 word.js），每個 Scenario 執行前都會建立一份乾淨狀態。
+你定義了：
+card：卡片狀態
+host：主機回應
+cash：出鈔相關
+network：網路異常
+ui：畫面狀態
+txn：交易結果
+重點：這層是「測試中的系統記憶體」，讓 Given/When/Then 可以共享狀態。
+
+
+根目錄其他檔案
+
+package.json
+定義測試指令（像 npm run test:bdd）。
+定義依賴套件（目前是 Cucumber）。
+BDD.txt
+比較像你整理的語句草稿/片段，不是 Cucumber 會直接執行的正式來源。
+用 BDD 視角看一次執行流程
+
+※流程
+1. Cucumber 先讀 feature（規格）
+2. 找到對應 step definitions（程式）
+3. 建立一個新的 World（乾淨 ATM 狀態）
+4. 依序跑 Given/When/Then 改變並驗證狀態
+5. 輸出每個 Scenario 的 pass/fail
+
+※npm run test test:bdd
+npm 先去讀 package.json
+找到 scripts 裡的 test:bdd 指令
+實際執行這段命令：
+cucumber-js "Withdrawal/features//*.feature" --require "Withdrawal/support//.js" --require "Withdrawal/step/**/.js"
+Cucumber 會：
+讀取 feature 檔（需求情境）在 features
+載入 step definitions（對應程式）在 step
+載入 World 狀態模型在 Withdrawal/support/word.js
+逐條執行 Given / When / Then，遇到 Then 斷言失敗就會標記失敗；都成功就 pass
+全部跑完後回傳結果，Exit Code 0 代表整體成功
