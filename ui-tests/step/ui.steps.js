@@ -13,6 +13,7 @@ async function expectState(world, stateName) {
 
     const actual = await world.page.locator('[data-testid="state-value"]').textContent();
     assert.strictEqual((actual || '').trim(), stateName);
+    await world.captureStateScreenshot(stateName); // Capture screenshot after verifying state
 }
 
 Given('UI ATM 已開啟於 IDLE', async function () {
