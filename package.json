@@ -3,11 +3,16 @@
     "version": "1.0.0",
     "description": "ATM frontend BDD test project",
     "scripts": {
-        "test:bdd": "cucumber-js \"Withdrawal/features/**/*.feature\" --require \"Withdrawal/support/**/*.js\" --require \"Withdrawal/step/**/*.js\"",
+        "test:bdd": "npm run test:bdd:sim",
+        "test:bdd:sim": "cucumber-js \"Withdrawal/features/**/*.feature\" --require \"Withdrawal/support/**/*.js\" --require \"Withdrawal/step/**/*.js\"",
         "test:bdd:progress": "cucumber-js \"Withdrawal/features/**/*.feature\" --require \"Withdrawal/support/**/*.js\" --require \"Withdrawal/step/**/*.js\" --format progress",
-        "test:bdd:json": "cucumber-js \"Withdrawal/features/**/*.feature\" --require \"Withdrawal/support/**/*.js\" --require \"Withdrawal/step/**/*.js\" --format json:reports/cucumber-report.json"
+        "test:bdd:json": "cucumber-js \"Withdrawal/features/**/*.feature\" --require \"Withdrawal/support/**/*.js\" --require \"Withdrawal/step/**/*.js\" --format json:reports/cucumber-report.json",
+        "ui:build": "npm --prefix atm-electron-ui run build",
+        "test:bdd:ui": "npm run ui:build && cross-env ELECTRON_E2E=1 ELECTRON_USE_DIST=1 cucumber-js \"ui-tests/features/**/*.feature\" --require \"ui-tests/support/**/*.js\" --require \"ui-tests/step/**/*.js\" --format progress"
     },
     "devDependencies": {
-        "@cucumber/cucumber": "^9.6.0"
+        "@cucumber/cucumber": "^9.6.0",
+        "cross-env": "^7.0.3",
+        "playwright": "1.44.1"
     }
 }

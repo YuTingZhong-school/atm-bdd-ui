@@ -15,9 +15,15 @@ function createWindow() {
         },
     });
 
-    if (!app.isPackaged) {
-        win.loadURL('http://localhost:5173');
-        win.webContents.openDevTools({ mode: 'detach' });
+    const useDist = process.env.ELECTRON_USE_DIST === '1';
+    const startUrl = process.env.ELECTRON_START_URL || 'http://localhost:5173';
+
+    if (!app.isPackaged && !useDist) {
+        win.loadURL(startUrl);
+
+        if (process.env.ELECTRON_E2E !== '1') {
+            win.webContents.openDevTools({ mode: 'detach' });
+        }
     } else {
         win.loadFile(path.join(__dirname, '../dist/index.html'));
     }

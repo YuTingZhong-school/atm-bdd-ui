@@ -5,7 +5,7 @@
                 <p class="eyebrow">ATM FRONT FLOW</p>
                 <h1>提款流程模擬</h1>
             </div>
-            <div class="status-chip">目前狀態: {{ state }}</div>
+            <div class="status-chip" data-testid="status-chip">目前狀態: <span data-testid="state-value">{{ state }}</span></div>
         </header>
 
         <main class="atm-stage">
@@ -13,13 +13,13 @@
                 <template v-if="state === STATES.IDLE">
                     <h2>IDLE</h2>
                     <p>ATM 待機中，等待客戶插卡。</p>
-                    <button class="primary" @click="goTo(STATES.WAIT_INSERT_CARD)">開始服務</button>
+                    <button class="primary" data-testid="btn-start-service" @click="goTo(STATES.WAIT_INSERT_CARD)">開始服務</button>
                 </template>
 
                 <template v-else-if="state === STATES.WAIT_INSERT_CARD">
                     <h2>等候插卡</h2>
                     <p>請插入金融卡。</p>
-                    <button class="primary" @click="startCardReading">插入卡片</button>
+                    <button class="primary" data-testid="btn-insert-card" @click="startCardReading">插入卡片</button>
                     <button class="ghost" @click="resetToIdle">返回待機</button>
                 </template>
 
@@ -38,9 +38,10 @@
                         maxlength="6"
                         placeholder="******"
                         class="field"
+                        data-testid="input-pin"
                     />
-                    <p v-if="pinError" class="error">{{ pinError }}</p>
-                    <button class="primary" @click="verifyPin">送出密碼</button>
+                    <p v-if="pinError" class="error" data-testid="error-pin">{{ pinError }}</p>
+                    <button class="primary" data-testid="btn-submit-pin" @click="verifyPin">送出密碼</button>
                 </template>
 
                 <template v-else-if="state === STATES.PIN_VERIFY_LOADING">
@@ -53,8 +54,8 @@
                     <h2>主選單</h2>
                     <p>請選擇交易服務。</p>
                     <div class="actions">
-                        <button class="primary" @click="selectQuickWithdraw">快速提款（1000）</button>
-                        <button class="primary alt" @click="goTo(STATES.WITHDRAW_INPUT)">提款交易服務</button>
+                        <button class="primary" data-testid="btn-fast-withdraw" @click="selectQuickWithdraw">快速提款（1000）</button>
+                        <button class="primary alt" data-testid="btn-withdraw-service" @click="goTo(STATES.WITHDRAW_INPUT)">提款交易服務</button>
                     </div>
                 </template>
 
@@ -68,9 +69,10 @@
                         step="100"
                         placeholder="例如 1300"
                         class="field"
+                        data-testid="input-amount"
                     />
-                    <p v-if="amountError" class="error">{{ amountError }}</p>
-                    <button class="primary" @click="submitWithdrawAmount">確認金額</button>
+                    <p v-if="amountError" class="error" data-testid="error-amount">{{ amountError }}</p>
+                    <button class="primary" data-testid="btn-submit-amount" @click="submitWithdrawAmount">確認金額</button>
                     <button class="ghost" @click="goTo(STATES.MAIN_MENU)">返回主選單</button>
                 </template>
 
@@ -84,15 +86,15 @@
                     <h2>交易成功，是否繼續交易？</h2>
                     <p>本次提款金額 {{ selectedAmount }} 元。</p>
                     <div class="actions">
-                        <button class="primary" @click="decideContinue(true)">是，繼續交易</button>
-                        <button class="primary alt" @click="decideContinue(false)">否，結束交易</button>
+                        <button class="primary" data-testid="btn-continue-yes" @click="decideContinue(true)">是，繼續交易</button>
+                        <button class="primary alt" data-testid="btn-continue-no" @click="decideContinue(false)">否，結束交易</button>
                     </div>
                 </template>
 
                 <template v-else-if="state === STATES.RESULT_VIEW">
                     <h2>交易結果顯示頁</h2>
                     <p>交易成功，提款金額 {{ selectedAmount }} 元。</p>
-                    <button class="primary" @click="startDispense">確認並吐鈔</button>
+                    <button class="primary" data-testid="btn-confirm-dispense" @click="startDispense">確認並吐鈔</button>
                 </template>
 
                 <template v-else-if="state === STATES.DISPENSING">
@@ -104,19 +106,19 @@
                 <template v-else-if="state === STATES.TAKE_CASH">
                     <h2>取鈔頁</h2>
                     <p>請取走您的現金。</p>
-                    <button class="primary" @click="finishTakeCash">我已取鈔</button>
+                    <button class="primary" data-testid="btn-take-cash" @click="finishTakeCash">我已取鈔</button>
                 </template>
 
                 <template v-else-if="state === STATES.EJECT_CARD">
                     <h2>退卡頁</h2>
                     <p>請取回您的金融卡。</p>
-                    <button class="primary" @click="goTo(STATES.THANK_YOU)">我已取卡</button>
+                    <button class="primary" data-testid="btn-take-card" @click="goTo(STATES.THANK_YOU)">我已取卡</button>
                 </template>
 
                 <template v-else-if="state === STATES.THANK_YOU">
                     <h2>謝謝光臨頁</h2>
                     <p>感謝使用本行 ATM。</p>
-                    <button class="primary" @click="resetToIdle">完成</button>
+                    <button class="primary" data-testid="btn-finish" @click="resetToIdle">完成</button>
                 </template>
             </section>
 
